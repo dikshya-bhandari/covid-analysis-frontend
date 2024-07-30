@@ -1,0 +1,39 @@
+.header-wrapper {
+  display: flex;
+  align-items: center;
+  background: #004D40;
+  color: white;
+  flex-direction: row;  
+  padding: 5px;  
+  position: fixed;
+  z-index: 111;
+  width: 100%;
+  padding-left: 10%;
+  /* flex-wrap: wrap; */
+}
+
+.logo {
+  flex: 1;
+}
+
+.logo img {
+  height: 40px;
+  margin-right: 16px;  
+  margin-top: 25px;
+}
+
+.title {
+  font-size: 25px;
+  color: #fff;
+  margin-left: 20px;
+}
+
+.buttons {
+  flex: 0.8;
+  text-align: right;
+}
+
+.buttons button {
+  margin-right: 8px;
+}
+
