@@ -877,4 +877,4 @@ const countryCodes = [
   },
 ];
 
-module.exports = countryCodes;
+export default countryCodes;

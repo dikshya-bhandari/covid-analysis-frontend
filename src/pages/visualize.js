@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Button, DatePicker, Divider, Empty, Select, Skeleton } from "antd";
+import {
+  Button,
+  DatePicker,
+  Divider,
+  Empty,
+  message,
+  Select,
+  Skeleton,
+} from "antd";
 import moment from "moment";
 import { ArrowRightOutlined } from "@ant-design/icons";
 import Plot from "react-plotly.js";
@@ -25,10 +33,6 @@ const Visualizer = () => {
     setDates(dates);
   };
 
-  const disabledDaysDate = (current, next) => {
-    return false;
-  };
-
   const onCountryChange = (value) => {
     setCountry(value);
   };
@@ -37,6 +41,17 @@ const Visualizer = () => {
     setLoading(true);
     const startDate = dates[0].format("YYYY-MM-DD");
     const endDate = dates[1].format("YYYY-MM-DD");
+
+    const startMoment = moment(startDate, "YYYY-MM-DD");
+    const endMoment = moment(endDate, "YYYY-MM-DD");
+    const dateDifference = endMoment.diff(startMoment, "days");
+
+    if (dateDifference > 60) {
+      setLoading(false);
+      message.error("Please select a date range within 60 days.");
+      return;
+    }
+
     getDatefromDateRange(startDate, endDate)
       .then((res) => {
         const data = res.map((x) => x._source);
@@ -75,7 +90,11 @@ const Visualizer = () => {
           <p className="i-input-section-p">Select Date Range</p>
           <RangePicker
             value={dates}
-            disabledDate={disabledDaysDate}
+            disabledDate={(current) =>
+              current &&
+              (current < dayjs("2020-02-01", dateFormat) ||
+                current > dayjs("2023-02-01", dateFormat))
+            }
             format="YYYY-MM-DD"
             onCalendarChange={(dates) => onChangeDate(dates)}
             placeholder="Please select a date range"
@@ -123,8 +142,9 @@ const Visualizer = () => {
                     {
                       x: requiredDates,
                       y: requiredData.map((x) => x[field]),
-                      type: "scatter",
-                      mode: "lines+markers",
+                      type: "bar",
+                      bargap: 0.15,
+                      // mode: "lines+markers",
                       marker: { color: "red" },
                     },
                   ]}
